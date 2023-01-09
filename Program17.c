@@ -7,14 +7,6 @@ struct Node{
 	struct Node* right;
 };
 
-
-//struct Node* newnode(int data) {
-//  struct Node* temp = (struct Node *)malloc(sizeof(struct Node));
-//  temp->data = data;
-//  temp->left = temp->right = NULL;
-//  return temp;
-//}
-
 struct Node* insertBST(struct Node *root, int val){
 	if(root==NULL){
 		struct Node* root = (struct Node *)malloc(sizeof(struct Node));
