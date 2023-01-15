@@ -1,3 +1,4 @@
+//Program 20: a menu driven program to perform various sorting techniques (insertion, shell, merge, heap, bubble, quick). 
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -21,19 +22,23 @@ void InsertionSort(int arr[],int n){
     }
 }
 
-void ShellSort(int arr[], int n) {
-	int i;
-  	for(i = n/2; i > 0; i /= 2) {
-  		int j;
-    	for (j = i; j < n; j++) {
-      		int temp = arr[i];
-      		int k;
-      		for(k = j; k >= i && arr[k - i] > temp; k-=i) {
-        		arr[j] = arr[k - i];
-      		}
-      		arr[j] = temp;
-    	}
-	}
+void ShellSort(int arr[], int n)
+{
+    int gap, i, j, temp;
+    for (gap = n / 2; gap >= 1; gap /= 2)
+    {
+        for (i = gap; i < n; i++)
+        {
+            temp = arr[i];
+            j = i - gap;
+            while (j >= 0 && arr[j] > temp)
+            {
+                arr[j + gap] = arr[j];
+                j = j - gap;
+            }
+            arr[j + gap] = temp;
+        }
+    }
 }
 
 void Merge(int arr[], int mid, int low, int high)
@@ -87,8 +92,8 @@ void swap(int *a, int *b) {
 }
 void heapify(int arr[], int n, int i) {
     int largest = i;
-    int left = 2 * i + 1;
-    int right = 2 * i + 2;
+    int left = 2*i + 1;
+    int right = 2*i + 2;
   
     if (left < n && arr[left] > arr[largest])
       largest = left;
@@ -106,10 +111,8 @@ void heapify(int arr[], int n, int i) {
  	int i;
     for (i = n / 2 - 1; i >= 0; i--)
       heapify(arr, n, i);
-  
     for (i = n - 1; i >= 0; i--) {
       swap(&arr[0], &arr[i]);
-  
     heapify(arr, i, 0);
     }
 }
@@ -256,4 +259,6 @@ int main(){
 	}
 	return 0;
 }
+
+
 

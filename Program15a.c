@@ -1,3 +1,5 @@
+//Program 15(a): Implement stacks using linked list.
+
 #include<stdio.h>
 #include<stdlib.h>
 
@@ -33,6 +35,24 @@ void pop(){
 	}
 }
 	
+void display(){  
+    int i;  
+    struct Node *temp;  
+    temp = top;  
+    if(temp == NULL)  
+    {  
+        printf("\nStack Underflow\n");  
+    }  
+    else  
+    {  
+        printf("Stack: ");  
+        do{
+			printf("%d  ",temp->data);
+			temp = temp->next;
+		}while(temp != NULL);
+    }  
+} 
+ 
 int main(){
 	int choice;
 	
@@ -41,7 +61,7 @@ int main(){
 		printf ("\n-----------------------------------");
 		printf ("\n      STACKS USING LINKED LIST      ");	
 		printf ("\n-----------------------------------");		
-		printf ("\nOPERATIONS:\n1. push()\n2. pop()\n3. Exit\n");
+		printf ("\nOPERATIONS:\n1. push()\n2. pop()\n3. Display \n4. Exit\n");
 	
 		printf("Enter your choice: ");
 		scanf("%d",&choice);
@@ -57,8 +77,11 @@ int main(){
 			pop();
 		}
 		
-
 		else if(choice == 3){
+			display();
+		}
+		
+		else if(choice == 4){
 			exit(0);
 		}
 		
@@ -66,6 +89,8 @@ int main(){
 			printf("Invalid choice!");
 		}
 	}
-	while (choice!=3);
+	while (choice!=4);
 	return 0;
 }
+
+

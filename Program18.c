@@ -1,382 +1,176 @@
+//Program 18: Implement traversals on Binary Search Tree (using stacks) - Inorder, Preorder, Postorder). 
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 
-typedef struct LLNode
-{
-    struct Node *data;
-    struct LLNode *next;
-} LLNode;
+struct Node{
+	int data;
+	struct Node* left;
+	struct Node* right;
+};
 
-typedef struct Stack
-{
-    LLNode *top;
-    int count;
-} Stack;
 
-void init(Stack *st)
-{
-    st->count = 0;
+
+struct Node* insertBST(struct Node *root, int val){
+	if(root==NULL){
+		struct Node* root = (struct Node *)malloc(sizeof(struct Node));
+  		root->data = val;
+  		root->left = root->right = NULL;
+  		return root;
+	}
+	else if(val<root->data){
+		root->left = insertBST(root->left,val);
+	}
+	else{
+		root->right= insertBST(root->right,val);
+	}
+	return root;	
 }
 
-bool isEmpty(Stack *st)
+void in_order(struct Node* root)
 {
-    if (st->count == 0)
+    struct Node *stack[100];
+    int top = -1;
+    struct Node *curr = root;
+    while (top != -1 || curr != NULL)
     {
-        return true;
+        if (curr != NULL)
+        {
+            stack[top++] = curr;
+            curr = curr->left;
+        }
+        else
+        {
+            curr = stack[--top];
+            printf("%d ", curr->data);
+            curr = curr->right;
+        }
     }
-
-    return false;
 }
 
-Node *atTop(Stack *st)
+void pre_order(struct Node* root)
 {
-    if (isEmpty(st))
-    {
-        printf("Stack is empty\n");
-        return NULL;
-    }
-
-    return st->top->data;
-}
-
-void push(Stack *st, Node *x)
-{
-    LLNode *newTop = (LLNode *)malloc(sizeof(LLNode));
-    newTop->next = NULL;
-    newTop->data = x;
-
-    if (newTop == NULL)
-    {
-        printf("Heap is full\n");
-        return;
-    }
-
-    newTop->next = st->top;
-    st->top = newTop;
-    st->count++;
-    return;
-}
-
-void pop(Stack *st)
-{
-    if (isEmpty(st))
-    {
-        printf("Already empty \n");
-        return;
-    }
-
-    LLNode *temp = st->top;
-    st->top = st->top->next;
-    st->count--;
-
-    if(st->count == 0)
-    {
-        st->top = NULL;
-    }
-
-    return;
-}
-
-typedef struct Node
-{
-    int data;
-    struct Node *left;
-    struct Node *right;
-} Node;
-
-Node *insert(Node *root, int i)
-{
+    struct Node *stack[100];
+    int top = -1;
     if (root == NULL)
+        return;
+
+    stack[top] = root;
+    top ++;
+
+    while (top != -1)
     {
-        Node *t = (Node *)malloc(sizeof(Node));
-        t->data = i;
-        t->left = NULL;
-        t->right = NULL;
+        root = stack[--top];
 
-        return t;
-    }
-
-    if (root->data > i)
-    {
-        root->left = insert(root->left, i);
-    }
-    else if (root->data < i)
-    {
-        root->right = insert(root->right, i);
-    }
-
-    return root;
-}
-
-void pre(Node *head)
-{
-    Node *t = head;
-    Stack st;
-    init(&st);
-
-    while (t != NULL || isEmpty(&st) == false)
-    {
-        if (t != NULL)
-        {
-            printf("%d ", t->data);
-            push(&st, t);
-            t = t->left;
-        }
-        else
-        {
-            t = atTop(&st);
-            pop(&st);
-
-            if (t == NULL)
-            {
-                break;
-            }
-            t = t->right;
-        }
-    }
-
-    printf("\n");
-};
-
-void in(Node *head)
-{
-    Node *t = head;
-    Stack st;
-    init(&st);
-
-    while (t != NULL || isEmpty(&st) == false)
-    {
-
-        if (t != NULL)
-        {
-            push(&st, t);
-            t = t->left;
-        }
-        else
-        {
-            t = atTop(&st);
-            pop(&st);
-
-            if (t == NULL)
-            {
-                break;
-            }
-
-            printf("%d ", t->data);
-
-            t = t->right;
-        }
-    }
-
-    printf("\n");
-};
-
-void post(Node *head)
-{
-    Node *t = head;
-    Stack st;
-    long long int temp;
-    init(&st);
-
-    while (t != NULL || isEmpty(&st) == false)
-    {
-        if (t != NULL)
-        {
-            push(&st, t);
-
-            t = t->left;
-        }
-        else
-        {
-            temp = (long long int)atTop(&st);
-            pop(&st);
-
-            if (temp == NULL)
-            {
-                break;
-            }
-
-            if (temp > 0)
-            {
-                Node *c = (Node *)(temp * (-1));
-                push(&st, c);
-
-                t = ((Node *)temp)->right;
-            }
-            else
-            {
-                printf("%d ", ((Node *)(temp * (-1)))->data);
-                t = NULL;
-            }
-        }
-    }
-
-    printf("\n");
-};
-
-int heightCalc(Node *h)
-{
-    // base condition
-    if (h == NULL)
-    {
-        return 0;
-    }
-
-    int x = heightCalc(h->left);
-    int y = heightCalc(h->right);
-
-    if (x > y)
-        return x + 1;
-
-    return y + 1;
-}
-
-Node *search(Node *t, int target)
-{
-    if (t == NULL)
-    {
-        return NULL;
-    }
-
-    // equal
-    if (t->data == target)
-    {
-        return t;
-    }
-    else if (t->data > target)
-    {
-        // left will have smaller elements
-        return search(t->left, target);
-    }
-    else
-    {
-        // right will have smaller elements
-        return search(t->right, target);
+        printf("%d ", root->data);
+        if (root->right != NULL)
+            stack[top++] = root->right;
+        if (root->left != NULL)
+            stack[top++] = root->left;
     }
 }
 
-Node *del(Node *root, int target, const Node *head)
+void post_order(struct Node* root)
 {
+    struct Node *stack[100];
+    if (root== NULL)
+        return;
 
-    if (root == NULL)
-    {
-        return NULL;
-    }
+    int top = -1;
+    struct Node *curr = root;
 
-    if (root->left == NULL && root->right == NULL && root->data == target)
+    while (1)
     {
-        if (root == head)
+        if (curr != NULL)
         {
-            head = NULL;
+            if (curr->right)
+                stack[++top] = curr->right;
+            stack[++top] = curr;
+            curr = curr->left;
+            continue;
+        }
+
+        if (top == -1)
+            return;
+        curr = stack[top--];
+
+        if (curr->right && top != -1 && stack[top] == curr->right)
+        {
+            top--;    
+            stack[++top] = curr;
+            curr = curr->right;
         }
         else
         {
-            free(root);
-        }
-
-        return NULL;
-    }
-
-    if (root->data > target)
-    {
-        root->left = del(root->left, target, head);
-    }
-    else if (root->data < target)
-    {
-        root->right = del(root->right, target, head);
-    }
-    else
-    {
-
-        if (heightCalc(root->left) > heightCalc(root->right))
-        {
-            Node *pre = root->left;
-            while (pre->right != NULL)
-            {
-                pre = pre->right;
-            }
-
-            root->data = pre->data;
-
-            root->left = del(root->left, pre->data, head);
-        }
-        else
-        {
-            Node *pre = root->right;
-            while (pre->left != NULL)
-            {
-                pre = pre->left;
-            }
-
-            root->data = pre->data;
-
-            root->right = del(root->right, pre->data, head);
-        }
-    }
-
-    return root;
-}
-
-int main()
-{
-    bool menu = true;
-
-    Node *root = NULL;
-
-    // menu
-    while (menu)
-    {
-        printf("Press\n1 for insert \n2 for delete\n3 to search a value\n4 for Preorder\n5 for Inorder\n6 for Postorder\n7 for exit\n");
-        int i;
-        scanf("%d", &i);
-
-        if (i == 1)
-        {
-            int in;
-            printf("enter the element you want to insert : ");
-            scanf("%d", &in);
-            root = insert(root, in);
-        }
-        else if (i == 2)
-        {
-            int in;
-            printf("enter the element you want to delete : ");
-            scanf("%d", &in);
-            root = del(root, in, root);
-        }
-        else if (i == 3)
-        {
-            int in;
-            printf("enter the element you want to search : ");
-            scanf("%d", &in);
-            Node *isPresent = search(root, in);
-
-            if (isPresent != NULL)
-                printf("The given value is present in the bst\n");
-            else
-                printf("The given value is not present in the bst\n");
-        }
-        else if (i == 4)
-        {
-            pre(root);
-        }
-        else if (i == 5)
-        {
-            in(root);
-        }
-        else if (i == 6)
-        {
-            post(root);
-        }
-        else if (i == 7)
-        {
-            menu = false;
-            break;
-        }
-        else
-        {
-            printf("Invalid Input\n");
+            printf("%d ", curr->data);
+            curr = NULL;
         }
     }
 }
+
+int main(){
+	int root_ele;
+	printf("Enter the root of tree: ");
+	scanf("%d",&root_ele);
+	struct Node* root = NULL;
+	root = insertBST(root,root_ele);
+	
+	char ch = 'y';
+	while(ch=='y' || ch=='Y'){
+		printf("\n*********** MENU ***********\n");
+		printf("1.Insert an element\n");
+		printf("2.Display elements of BST in Preorder, Postorder and Inorder\n\n");
+		
+		int choice;
+		printf("Enter your choice: ");
+		scanf("%d",&choice);
+		
+		if(choice==1){
+			int x;
+			printf("Enter the element: ");
+			scanf("%d",&x);
+			insertBST(root,x);
+			printf("Element %d inserted in BST!\n",x);
+		}
+		
+		else if(choice==2){
+			char ch1 = 'y';
+			while(ch1=='y' || ch1=='Y'){
+				printf("\n***** TRAVERSALS *****\n");
+				printf("1.Preorder Traversal\n");
+				printf("2.Postorder Traversal\n");
+				printf("3.Inorder Traversal\n\n");
+				
+				int choice2;
+				printf("Enter your choice: ");
+				scanf("%d",&choice2);
+				
+				if(choice2==1){
+					printf("Preorder Traversal: ");
+					pre_order(root);
+				}
+				else if(choice2==2){
+					printf("Postorder Traversal: ");
+					post_order(root);
+				}
+				else if(choice2==3){
+					printf("Inorder Traversal: ");
+					in_order(root);
+				}
+				else{
+					printf("Invalid choice!\n");
+				}
+				printf("\nWant to continue traversal?(y/n): ");
+				scanf("%s",&ch1);
+			}
+		}
+		else{
+			printf("\nInvalid choice!\n");
+		}
+		printf("\nWant to continue?(y/n): ");
+		scanf("%s",&ch);	
+	}
+	return 0;
+}
+
+
+

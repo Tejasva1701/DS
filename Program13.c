@@ -1,3 +1,6 @@
+//Program 13: Implement operations (enqueue, dequeue) on a queue using arrays. 
+//Check the status of the queue whether it is empty or full.
+ 
 #include<stdio.h>
 #include<stdlib.h>
 
@@ -13,7 +16,7 @@ void enqueue(int x){
 	}
 	back++;
 	Queue[back] = x;
-	printf("Element %d enqueued in the queue.",x);	
+	printf("Element %d enqueued in the queue.\n",x);	
 	if(front == -1){
 		front++;
 	}
@@ -25,9 +28,22 @@ void dequeue(){
 		return;
 	}
 	front++;
-	printf("Element dequeued from the queue.") ;
+	printf("Element dequeued from the queue.\n") ;
 }
 
+void display(){
+	int i;
+	if (front == -1 || front > back){
+		printf("Queue is Underflow!\n");
+		return;
+	}
+	else{
+		printf("Queue: ");
+		for (i = front; i <= back; i++){
+			printf("%d  ",Queue[i]);
+		}	
+	}
+}
 
 int main(){
 	printf("Enter size of the Queue: ");
@@ -40,7 +56,7 @@ int main(){
 		printf ("\n-----------------------------------");
 		printf ("\n        QUEUE USING ARRRAYS        ");	
 		printf ("\n-----------------------------------");		
-		printf ("\nOPERATIONS:\n1. enqueue()\n2. dequeue()\n3. Exit\n");
+		printf ("\nOPERATIONS:\n1. enqueue()\n2. dequeue()\n3. Display \n4. Exit\n");
 	
 		printf("Enter your choice: ");
 		scanf("%d",&choice);
@@ -55,9 +71,11 @@ int main(){
 		else if(choice == 2){
 			dequeue();
 		}
-		
-
 		else if(choice == 3){
+			display();
+		}		
+
+		else if(choice == 4){
 			exit(0);
 		}
 		
@@ -65,6 +83,7 @@ int main(){
 			printf("Invalid choice!");
 		}
 	}
-	while (choice!=3);
+	while (choice!=4);
 	return 0;
 }
+

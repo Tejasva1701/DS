@@ -1,3 +1,5 @@
+//Program 14(a): Implement circular queue using arrays
+
 #include<stdio.h>
 #include<stdlib.h>
 
@@ -40,6 +42,21 @@ void dequeue(){
 	}
 }
 
+void display(){
+	int i;
+	if (front == -1 && back == -1){
+		printf("Queue is Underflow!\n");
+		return;
+	}
+	else{
+		printf("Queue: ");
+		for (i = front; i <= back; i++){
+			printf("%d  ",Queue[i]);
+		}	
+	}
+}
+
+
 int main(){
 	printf("Enter size of the Queue: ");
 	scanf("%d",&n);
@@ -51,7 +68,7 @@ int main(){
 		printf ("\n-----------------------------------");
 		printf ("\n        QUEUE USING ARRRAYS        ");	
 		printf ("\n-----------------------------------");		
-		printf ("\nOPERATIONS:\n1. enqueue()\n2. dequeue()\n3. Exit\n");
+		printf ("\nOPERATIONS:\n1. enqueue()\n2. dequeue()\n3. Display \n4. Exit\n");
 	
 		printf("Enter your choice: ");
 		scanf("%d",&choice);
@@ -67,8 +84,11 @@ int main(){
 			dequeue();
 		}
 		
-
 		else if(choice == 3){
+			display();
+		}
+		
+		else if(choice == 4){
 			exit(0);
 		}
 		
@@ -76,6 +96,8 @@ int main(){
 			printf("Invalid choice!");
 		}
 	}
-	while (choice!=3);
+	while (choice!=4);
 	return 0;
 }
+
+
