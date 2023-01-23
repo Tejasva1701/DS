@@ -1,0 +1,221 @@
+//Program 4: Implement insertion and deletion (at the beginning, at specified location, at the end) on double linked list
+
+#include <stdio.h>
+#include <conio.h>
+#include <stdlib.h>
+
+struct Node
+{
+    int data;
+    struct Node *prev;
+    struct Node *next;
+};
+struct Node *head = NULL;
+
+void Display()
+{
+    if (head == NULL)
+        printf("\nList is Empty");
+    else
+    {
+        struct Node *temp = head;
+        printf("Double Linked list: ");
+        while (temp != NULL)
+        {
+            printf("%d  ", temp->data);
+            temp = temp->next;
+        }
+        printf("\n");
+    }
+}
+
+void InsertAtBeginning(int x){
+	struct Node *temp = malloc(sizeof(struct Node));
+    temp->prev = NULL;
+    temp->data = x;
+    temp->next = NULL;
+    if (head == NULL)
+        head = temp;
+    else
+    {
+        head->prev = temp;
+        temp->next = head;
+        head = temp;
+    }
+}
+
+void InsertAtEnd(int x){
+	struct Node *temp = malloc(sizeof(struct Node));
+    temp->prev = NULL;
+    temp->data = x;
+    temp->next = NULL;
+    if (head == NULL)
+        head = temp;
+    else{
+        struct Node *tra;
+        tra = head;
+        while (tra->next != NULL){
+            tra = tra->next;
+        }
+        temp->prev = tra;
+        tra->next = temp;
+        temp->next = NULL;
+    }
+}
+
+void InsertAtIndex(int index, int x){
+    struct Node *ptr = head;
+    struct Node *temp;
+    int i;
+
+    temp = (struct Node *)malloc(sizeof(struct Node));
+    temp->data = x;
+
+    for (i = 0; i < index - 1; i++)
+    {
+        ptr = ptr->next;
+    }
+
+    temp->next = ptr->next;
+    temp->prev = ptr;
+    ptr->next = temp;
+}
+	
+void DeleteFromBeginning(){
+    if (head == NULL)
+    {
+        printf("\nList is Empty");
+    }
+    else
+    {
+        struct Node *temp = malloc(sizeof(struct Node));
+        temp = head;
+        head = head->next;
+        temp->next = NULL;
+        head->prev = NULL;
+        free(temp);
+    }
+}
+
+void DeleteFromEnd(){
+	    if (head == NULL)
+    {
+        printf("\nList is Empty");
+    }
+    else
+    {
+        struct Node *tra;
+        tra = head;
+        while (tra->next != NULL)
+        {
+            tra = tra->next;
+        }
+        tra->prev->next = NULL;
+        tra->prev = NULL;
+        tra->next = NULL;
+        free(tra);
+    }
+}
+
+int DeleteFromIndex(struct Node *ptr, int index)
+{
+    struct Node *q = NULL;
+    int x = -1, i;
+
+    if (index == 1)
+    {
+        q = head;
+        x = head->data;
+        head = head->next;
+        free(q);
+        return x;
+    }
+    else
+    {
+        for (i = 0; i < index - 1; i++)
+        {
+            q = ptr;
+            ptr = ptr->next;
+        }
+        q->next = ptr->next;
+        x = ptr->data;
+        free(ptr);
+        return x;
+    }
+}
+
+
+int main(){
+	int choice;
+	printf("\nDOUBLE LINKED LIST"); 
+    do
+	{	
+		printf("\n\n******** MENU ********\n");
+    	printf("1.Insertion At Beginning\n");
+		printf("2.Insertion At End\n");
+		printf("3.Insertion at a Specified Location\n");
+		printf("4.Deletion From Beginning\n");
+		printf("5.Deletion From End\n");
+		printf("6.Deletion at a Specified Location\n");
+		printf("7.Exit\n"); 
+	
+		printf("Enter your choice: ");
+		scanf("%d",&choice);
+		
+		if(choice == 1){
+			int x;
+			printf("Enter the element: ");
+	    	scanf("%d",&x);
+	        InsertAtBeginning(x);
+        	Display();
+		}
+		
+		else if(choice == 2){
+			int x;
+			printf("Enter the element: ");
+	    	scanf("%d",&x);
+	        InsertAtEnd(x);
+			Display();
+		}
+		
+		else if(choice == 3){
+			int x,pos;
+			printf("Enter the element and index at which you want to insert it: ");
+	    	scanf("%d%d",&x,&pos);
+        	InsertAtIndex(pos+1,x);
+			Display();  
+		}
+		
+		else if(choice == 4){
+			DeleteFromBeginning();
+	        printf("Element Deleted from Beginning!");
+			Display(); 
+		}
+		
+		else if(choice == 5){
+			DeleteFromEnd();
+	        printf("Element Deleted from End!");
+	        Display();
+		}
+		
+		else if(choice == 6){
+			int pos;
+			printf("Enter the index from where you want to deleted an element: ");
+        	scanf("%d",&pos);
+	        DeleteFromIndex(head,pos+1);
+			Display();  
+		}
+		
+		else if(choice == 7){
+			exit(0);
+		}
+		
+		else{
+			printf("Invalid choice!");
+		}
+	}
+	while (choice!=7);
+	return 0;
+}
+
+
